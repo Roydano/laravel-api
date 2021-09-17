@@ -2275,7 +2275,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     formatoData: function formatoData(date) {
       var data = new Date(date);
-      return data.getDate() + '/' + data.getMonth() + 1 + '/' + data.getFullYear();
+      return data.getDate() + '/' + data.getMonth() + '/' + data.getFullYear();
     }
   }
 });
