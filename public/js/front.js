@@ -2253,29 +2253,75 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "Main",
   data: function data() {
     return {
       postUrl: 'http://127.0.0.1:8000/api/posts',
-      posts: []
+      posts: [],
+      currentPage: [],
+      lastPage: []
     };
   },
   created: function created() {
-    this.getPosts();
+    this.getPosts(1);
   },
   methods: {
-    getPosts: function getPosts() {
+    getPosts: function getPosts(pagePost) {
       var _this = this;
 
-      axios.get(this.postUrl).then(function (response) {
-        console.log(response.data.result);
-        _this.posts = response.data.result;
+      axios.get(this.postUrl, {
+        params: {
+          page: pagePost
+        }
+      }).then(function (response) {
+        // console.log(response.data.result.data);
+        _this.posts = response.data.result.data; // console.log(response.data.result);
+
+        _this.currentPage = response.data.result.current_page;
+        _this.lastPage = response.data.result.last_page;
       })["catch"]();
     },
     formatoData: function formatoData(date) {
       var data = new Date(date);
-      return data.getDate() + '/' + data.getMonth() + '/' + data.getFullYear();
+      var month = data.getMonth();
+      var day = data.getDate();
+
+      if (month < 10) {
+        month = '0' + parseInt(month + 1);
+      }
+
+      if (day < 10) {
+        day = '0' + day;
+      }
+
+      return day + '/' + month + '/' + data.getFullYear();
     }
   }
 });
@@ -2292,7 +2338,7 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_Header__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../components/Header */ "./resources/js/components/Header.vue");
-/* harmony import */ var _components_Main__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../components/Main */ "./resources/js/components/Main.vue");
+/* harmony import */ var _components_Main__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../components/Main */ "./resources/js/components/Main.vue");
 //
 //
 //
@@ -2308,7 +2354,7 @@ __webpack_require__.r(__webpack_exports__);
   name: "App",
   components: {
     Header: _components_Header__WEBPACK_IMPORTED_MODULE_0__["default"],
-    Main: _components_Main__WEBPACK_IMPORTED_MODULE_2__["default"]
+    Main: _components_Main__WEBPACK_IMPORTED_MODULE_1__["default"]
   }
 });
 
@@ -6768,7 +6814,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "main[data-v-b9c20fb8] {\n  background-color: #dadada;\n}\nmain .card[data-v-b9c20fb8] {\n  box-shadow: 2px 2px 2px 2px #757575;\n}\nmain .card .card-header[data-v-b9c20fb8] {\n  font-size: 20px;\n  color: white;\n}\nmain .card .card-body[data-v-b9c20fb8] {\n  background-color: white;\n}\nmain .card .card-body .card-title[data-v-b9c20fb8] {\n  display: -webkit-box;\n  -webkit-box-orient: vertical;\n  -webkit-line-clamp: 1;\n  overflow: hidden;\n}\nmain .card .card-body .card-text[data-v-b9c20fb8] {\n  display: -webkit-box;\n  -webkit-box-orient: vertical;\n  -webkit-line-clamp: 3;\n  overflow: hidden;\n}\nmain .card button[data-v-b9c20fb8] {\n  color: white;\n}", ""]);
+exports.push([module.i, "main[data-v-b9c20fb8] {\n  background-color: #dadada;\n}\nmain .card[data-v-b9c20fb8] {\n  box-shadow: 2px 2px 2px 2px #757575;\n}\nmain .card .card-header[data-v-b9c20fb8] {\n  font-size: 20px;\n  color: white;\n}\nmain .card .card-body[data-v-b9c20fb8] {\n  background-color: white;\n}\nmain .card .card-body .card-title[data-v-b9c20fb8] {\n  display: -webkit-box;\n  -webkit-box-orient: vertical;\n  -webkit-line-clamp: 1;\n  overflow: hidden;\n}\nmain .card .card-body .card-text[data-v-b9c20fb8] {\n  display: -webkit-box;\n  -webkit-box-orient: vertical;\n  -webkit-line-clamp: 3;\n  overflow: hidden;\n}\nmain .card button[data-v-b9c20fb8] {\n  color: white;\n}\nmain .card button[data-v-b9c20fb8]:hover {\n  background-color: #a0a0a0;\n}", ""]);
 
 // exports
 
@@ -38766,7 +38812,96 @@ var render = function() {
           ])
         }),
         0
-      )
+      ),
+      _vm._v(" "),
+      _c("hr"),
+      _vm._v(" "),
+      _c("p", { staticClass: "text-center" }, [
+        _vm._v("Pag. " + _vm._s(_vm.currentPage))
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "row justify-content-center" }, [
+        _c("nav", { attrs: { "aria-label": "Page navigation example" } }, [
+          _c(
+            "ul",
+            { staticClass: "pagination" },
+            [
+              _c(
+                "li",
+                {
+                  staticClass: "page-item",
+                  class: { disabled: _vm.currentPage == 1 }
+                },
+                [
+                  _c(
+                    "a",
+                    {
+                      staticClass: "page-link",
+                      attrs: { href: "#", "aria-label": "Previous" },
+                      on: {
+                        click: function($event) {
+                          return _vm.getPosts(_vm.currentPage - 1)
+                        }
+                      }
+                    },
+                    [
+                      _c("span", { attrs: { "aria-hidden": "true" } }, [
+                        _vm._v("«")
+                      ])
+                    ]
+                  )
+                ]
+              ),
+              _vm._v(" "),
+              _vm._l(_vm.lastPage, function(i) {
+                return _c("li", { key: i, staticClass: "page-item" }, [
+                  _c(
+                    "a",
+                    {
+                      staticClass: "page-link",
+                      attrs: { href: "#" },
+                      on: {
+                        click: function($event) {
+                          return _vm.getPosts(i)
+                        }
+                      }
+                    },
+                    [_vm._v(_vm._s(i))]
+                  )
+                ])
+              }),
+              _vm._v(" "),
+              _c(
+                "li",
+                {
+                  staticClass: "page-item",
+                  class: { disabled: _vm.currentPage == _vm.lastPage }
+                },
+                [
+                  _c(
+                    "a",
+                    {
+                      staticClass: "page-link",
+                      attrs: { href: "#", "aria-label": "Next" },
+                      on: {
+                        click: function($event) {
+                          return _vm.getPosts(_vm.currentPage + 1)
+                        }
+                      }
+                    },
+                    [
+                      _c("span", { attrs: { "aria-hidden": "true" } }, [
+                        _vm._v("»")
+                      ])
+                    ]
+                  )
+                ]
+              )
+            ],
+            2
+          )
+        ])
+      ])
     ])
   ])
 }
